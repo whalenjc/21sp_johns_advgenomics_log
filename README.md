@@ -1,33 +1,45 @@
 John's Notebook
 ================
 
-## day 01
-*exercises day 01 - Jan 20, 2021
+## Day01 Exercises 2021-Jan-20
 
-## day02
-*exercises day02 - Jan 22, 2021
-#2- Make a directory in your course workspace called data
+## Day02 Exercises 2021-Jan-22
+
+Exercise day02:
+1- Logon to the cluster @turing.hpc.odu.edu
+```
+Ava@Ava-PC MINGW64 ~/courses/21sp_advgenomics (master)
+$ ssh jwhal002@turing.hpc.odu.edu
+jwhal002@turing.hpc.odu.edu's password:
+Last login: Mon Feb  1 10:21:58 2021 from 10.254.223.22
+[jwhal002@turing1 ~]$
+```
+
+2- Make a directory in your course workspace called data
 ```
 [jwhal002@turing1 john]$ mkdir data
 ```
-#3- Make a directory called exercises in your data directory
+3- Make a directory called exercises in your data directory
 ```
 [jwhal002@turing1 data]$ mkdir exercises
 ```
-#4- execute a pwd command and start a log of your commands with a header for today's date in your README.md github logfile in your workspace
+4- execute a pwd command and start a log of your commands with a header for today's date in your README.md github logfile in your workspace
 ```
 [jwhal002@turing1 exercises]$ pwd
 /cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/exercises
-#5- cp the Exercise2.fasta.gz and Exercise2.fastq.tar.gz files into your exercises directory from the /cm/shared/courses/dbarshis/21AdvGenomics/assignments_exercises/day02 directory
+```
+5- cp the Exercise2.fasta.gz and Exercise2.fastq.tar.gz files into your exercises directory from the 
+```
+/cm/shared/courses/dbarshis/21AdvGenomics/assignments_exercises/day02 directory
 [jwhal002@turing1 exercises]$ cp /cm/shared/courses/dbarshis/21AdvGenomics/assignments_exercises/day02/Exercise2* .
 ```
-#6- unzip and untar the files
+6- unzip and untar the files
 ```
 [jwhal002@turing1 exercises]$ gunzip Exercise2.fasta.gz
 [jwhal002@turing1 exercises]$ tar -xvzf Exercise2.fastq.tar.gz
 Exercise2.fastq
 ```
-#8- calculate how many sequences are in each file and add these results to your notebook file
+8- calculate how many sequences are in each file and add these results to your notebook file
 ```
 [jwhal002@turing1 exercises]$ grep -c '>' Exercise2.fasta
 138
@@ -36,7 +48,19 @@ Exercise2.fastq
 [jwhal002@turing1 exercises]$ echo 245216/4 |bc
 61304
 ```
-#11- run the avg_cov_len_fasta_DJB.py script on your Exercise2.fasta file by typing the path to the script followed by the Exercise2.fasta file name
+9- cp the avg_cov_len_fasta_advbioinf.py from the /cm/shared/courses/dbarshis/21AdvGenomics/scripts directory into your class scripts directory
+```
+[jwhal002@turing1 exercises]$ cp /cm/shared/courses/dbarshis/21AdvGenomics/scripts/avg_cov_len_fasta_advbioinf.py ../../scripts/
+```
+10- start an interactive compute session and re-navigate to your exercises directory
+```
+[jwhal002@turing1 exercises]$ salloc                              salloc: Pending job allocation 9271631
+salloc: job 9271631 queued and waiting for resources
+salloc: job 9271631 has been allocated resources
+salloc: Granted job allocation 9271631
+[jwhal002@coreV1-22-016 exercises]$
+```
+11- run the avg_cov_len_fasta_DJB.py script on your Exercise2.fasta file by typing the path to the script followed by the Exercise2.fasta file name
 ```
 [jwhal002@coreV1-22-005 exercises]$ ../../scripts/avg_cov_len_fasta_advbioinf.py Exercise2.fasta
 The total number of sequences is 138
@@ -51,6 +75,11 @@ contigs >= 500bp = 138
 contigs >= 1000bp = 138
 contigs >= 2000bp = 135
 ```
+13- push your notebook file to your github page
+```
+
+```
+
 
 
 ##Day 02 Homework
