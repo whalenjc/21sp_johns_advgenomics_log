@@ -241,20 +241,94 @@ Submitted batch job 9271704
 ```
 7. Make sure this is all documented on your github page
 ```
+Ava@Ava-PC MINGW64 ~/courses/21sp_advgenomics/21sp_johns_advgenomics_log (main)
+$ pwd
+/c/Users/Ava/courses/21sp_advgenomics/21sp_johns_advgenomics_log
 
+Ava@Ava-PC MINGW64 ~/courses/21sp_advgenomics/21sp_johns_advgenomics_log (main)
+$ git add README.md
+warning: LF will be replaced by CRLF in README.md.
+The file will have its original line endings in your working directory
 
+Ava@Ava-PC MINGW64 ~/courses/21sp_advgenomics/21sp_johns_advgenomics_log (main)
+$ git commit -m 'updating readme'
+[main 2f6d26b] updating readme
+ 1 file changed, 138 insertions(+), 12 deletions(-)
+
+Ava@Ava-PC MINGW64 ~/courses/21sp_advgenomics/21sp_johns_advgenomics_log (main)
+$ git push -u origin main
+Logon failed, use ctrl+c to cancel basic credential prompt.
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 3.28 KiB | 839.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/whalenjc/21sp_johns_advgenomics_log.git
+   140f434..2f6d26b  main -> main
+Branch 'main' set up to track remote branch 'main' from 'origin'.
 ```
 8. The naming convention for the files is as follows:
   * SOURCEPOPULATION_SYMBIOTICSTATE_GENOTYPE_TEMPERATURE.fastq
   * There are 2 sources: Virginia and Rhode Island
   * There are 2 symbiotic states: Brown and White
+9. Next, you're going to start the process of adapter clipping and quality trimming all the renamed .fastq files in batches, by lane
+10. cp the script /cm/shared/courses/dbarshis/21AdvGenomics/scripts/Trimclipfilterstatsbatch_advbioinf.py into your scripts directory
+```
+[jwhal002@coreV1-22-016 fastq]$ cp /cm/shared/courses/dbarshis/21AdvGenomics/scripts/Trimclipfilterstatsbatch_advbioinf.py ../../scripts/
+```
+11. Less/head the new script and check out the usage statement
+```
+[jwhal002@coreV1-22-016 fastq]$ head -5 ../../scripts/Trimclipfilterstatsbatch_advbioinf.py
+#!/usr/bin/env python
+# Written by Dan Barshis
+
+import sys, os
+```
+12. cp the /cm/shared/courses/dbarshis/21AdvGenomics/assignments_exercises/day03/adapterlist_advbioinf.txt into the working directory with your fastq files
+```
+[jwhal002@coreV1-22-016 fastq]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq
+[jwhal002@coreV1-22-016 fastq]$ cp /cm/shared/courses/dbarshis/21AdvGenomics/assignments_exercises/day03/adapterlist_advbioinf.txt .
+```
+13. Make a sbatch script for the Trimclipfilter... script and run it on your fastq files
+```
+[jwhal002@coreV1-22-016 fastq]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq
+[jwhal002@coreV1-22-016 fastq]$ cat TestTrimClip.sh
+#!/bin/bash -l
+
+#SBATCH -o jcw_testTrimclip.txt
+#SBATCH -n 1
+#SBATCH --mail-user=jwhal002@odu.edu
+#SBATCH --mail-type=END
+#SBATCH --job-name=jcwTrimTest
+
+../../scripts/Trimclupfilterstatsbatch_advbioinf.py adapterlist_advbioinf.txt *.fastq
+[jwhal002@coreV1-22-016 fastq]$
+[jwhal002@coreV1-22-016 fastq]$ sbatch FullTrimClip.sh
+
+```
+14. This will take a while (like days)
+15. Now might be a good time to update everything on your github
+
+## Day04 Homework 29-Jan-2021
+1-Add your trimclipstats.txt output to the full class datafile /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/Fulltrimclipstatstable.txt using the following steps
 ```
 
-```  
-  
-  
-  
-  
-  
-  
-  
+```
+1a-run /cm/shared/courses/dbarshis/21AdvGenomics/scripts/Schafran_trimstatstable_advbioinf_clippedtrimmed.py -h to examine usage
+```
+
+```
+1b-Run the script on your data with the outputfilename YOURNAME_trimclipstatsout.txt
+```
+
+```
+1c-Add YOURNAME_trimclipstatsout.txt to the class file by running tail -n +2 YOURNAME_trimclipstatsout.txt >> /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/Fulltrimclipstatstable.txt
+```
+
+
+```
+2-Now we're going to map our reads back to our assembly using
+
