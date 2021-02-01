@@ -77,23 +77,34 @@ contigs >= 2000bp = 135
 ```
 13- push your notebook file to your github page
 ```
+Ava@Ava-PC MINGW64 ~/courses/21sp_advgenomics/21sp_johns_advgenomics_log (main)
+$ git add README.md
 
+Ava@Ava-PC MINGW64 ~/courses/21sp_advgenomics/21sp_johns_advgenomics_log (main)
+$ git commit -m 'updating readme'
+1 file changed, 54 insertions(+), 11 deletion(-)
+Ava@Ava-PC MINGW64 ~/courses/21sp_advgenomics/21sp_johns_advgenomics_log (main)
+$ git push -u origin main
+Logon failed, use ctrl+c to cancel basic credential prompt.
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 797 bytes | 797.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/whalenjc/21sp_johns_advgenomics_log.git
+   22798ce..140f434  main -> main
+Branch 'main' set up to track remote branch 'main' from 'origin'.
 ```
 
-
-
-##Day 02 Homework
+## Day02 Homework 2021-Jan-22
 
 1- Write an sbatch script to cp the files /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/originalfastqs/ into your own data directory
-   Kristina-HADB01
-   Ivan-HADB02
-   KatieP-HADB03
-   KatieC-HADB04
-   Stephanie-HADB05
-   Areej-HADB06
-   Andrew-HADB01
-   John-HADB02
-   dan-All
+John-HADB02
+```
+[jwhal002@coreV2-25-072 data]$ nano DBcopylane02.sh
+```
 2- Add the content of your sbatch script to your logfile
 
 ```
@@ -113,6 +124,15 @@ cp /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/origin
 ```
 
 3- submit the slurm script (sbatch scripname.sh) and verify that it's working (by squeue -u yourusername multiple times and checking the destination directory to make sure the files are being created)
+```
+[jwhal002@coreV1-22-016 data]$ sbatch DBcopylane02.sh
+Submitted batch job 9271688
+[jwhal002@coreV1-22-016 data]$ squeue -u jwhal002
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           9271688      main DBcopyla jwhal002  R       0:02      1 coreV2-25-047
+           9271631      main       sh jwhal002  R    1:34:06      1 coreV1-22-016
+[jwhal002@coreV1-22-016 data]$
+```
 4- Make sure this is all documented on your github notebook
 5- Write a sbatch script to gunzip all the fastq.gz files in your data directory
 ```
@@ -132,3 +152,109 @@ gunzip *fastq.gz
 Submitted batch job 9270464 
 ```
 6- Push your notebook file to your github page (document everything on your github notebook, drink a beer, and realize that all that work was just to get the data organized to start looking at it!)
+
+## Day03 Homework 27-Jan-2021
+day03 homework
+
+```
+[jwhal002@coreV1-22-016 john]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john
+```
+1. cp the /cm/shared/courses/dbarshis/21AdvGenomics/assignments_exercises/day03 directory (and files) to your sandbox
+```
+[jwhal002@coreV1-22-016 john]$ cp -r /cm/shared/courses/dbarshis/21AdvGenomics/assignments_exercises/day03/ .
+```
+2. mkdir a fastq directory in your data directory and mv all the .fastq files into this directory
+```
+[jwhal002@coreV1-22-016 john]$ cd data
+[jwhal002@coreV1-22-016 data]$ mkdir fastq
+[jwhal002@coreV1-22-016 data]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data
+[jwhal002@coreV1-22-016 data]$ mv *fastq.gz ./fastq/
+```
+3. cp the renamingtable_complete.txt from the day03 directory into your fastq directory and the /cm/shared/courses/dbarshis/21AdvGenomics/scripts/renamer_advbioinf.py script into your sandbox scripts folder and less the new script and check out the usage statement
+```
+[jwhal002@coreV1-22-016 data]$ cp ../day03/renamingtable_complete.txt fastq/
+[jwhal002@coreV1-22-016 data]$ cp /cm/shared/courses/dbarshis/21AdvGenomics/scripts/renamer_advbioinf.py ../scripts/
+[jwhal002@coreV1-22-016 data]$ less -s ../scripts/renamer_advbioinf.py 
+```
+4. run the renamer_advbioinf.py script in your fastq folder using the renamingtable_complete.txt as practice and verify the output to the screen by hand
+```
+[jwhal002@coreV1-22-016 data]$ cd fastq/
+[jwhal002@coreV1-22-016 fastq]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq
+[jwhal002@coreV1-22-016 fastq]$ ../../scripts/renamer_advbioinf.py renamingtable_complete.txt 
+mv HADB02-A_S33_L003_R1_001.fastq VA_W_02_14.fastq
+mv HADB02-B_S34_L003_R1_001.fastq VA_B_02_14.fastq
+mv HADB02-C_S35_L003_R1_001.fastq RI_W_02_14.fastq
+mv HADB02-D_S36_L003_R1_001.fastq RI_B_02_14.fastq
+mv HADB02-E_S37_L003_R1_001.fastq VA_W_02_22.fastq
+mv HADB02-F_S38_L003_R1_001.fastq VA_B_02_22.fastq
+mv HADB02-G_S39_L003_R1_001.fastq RI_W_02_22.fastq
+mv HADB02-H_S40_L003_R1_001.fastq RI_B_02_22.fastq
+mv HADB02-I_S41_L003_R1_001.fastq VA_W_02_18.fastq
+mv HADB02-J_S42_L003_R1_001.fastq VA_B_02_18.fastq
+mv HADB02-K_S43_L003_R1_001.fastq RI_W_02_18.fastq
+mv HADB02-L_S44_L003_R1_001.fastq RI_B_02_18.fastq
+mv HADB02-M_S45_L003_R1_001.fastq VA_W_09_SNP.fastq
+mv HADB02-N_S46_L003_R1_001.fastq VA_B_08_SNP.fastq
+mv HADB02-O_S47_L003_R1_001.fastq RI_W_09_SNP.fastq
+mv HADB02-P_S48_L003_R1_001.fastq RI_B_09_SNP.fastq
+
+```
+5. Uncomment the last line of the renaming script in your scripts folder that starts with os.popen and comment out the next to last line that starts with print
+```
+[jwhal002@coreV1-22-016 fastq]$ nano renamer_advbioinf.py                                                                              [jwhal002@coreV1-22-016 fastq]$ cat renamer_advbioinf.py
+#!/usr/bin/env python
+####usage renamer.py renamingtable
+#### this script take the entries in the first column of table and renames (mv's) them to files with the names in the second column
+import sys
+import os
+
+fin=open(sys.argv[1],'r')
+linecount=0
+for line in fin:
+        linecount+=1
+        if linecount>=2:
+                cols=line.rstrip().split('\t')
+#               print 'mv %s %s' %(cols[0], cols[1])
+                os.popen('mv %s %s' %(cols[0], cols[1]))
+```
+6. write a sbatch script and submit it to rename all the .fastq files according to the renaming table using your renamer_advbioinf.py script
+```
+[jwhal002@coreV1-22-016 fastq]$ cat john_renamer.sh
+#!/bin/bash -l
+
+#SBATCH -o john_renamer.txt
+#SBATCH -n 1
+#SBATCH --mail-user=jwhal002@odu.edu
+#SBATCH --mail-type=END
+#SBATCH --job-name=fastqrenamer
+
+renamer_advbioinf.py renamingtable_complete.txt
+[jwhal002@coreV1-22-016 fastq]$ sbatch john_renamer.sh
+Submitted batch job 9271704
+[jwhal002@coreV1-22-016 fastq]$ squeue -u jwhal002
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           9271704      main fastqren jwhal002 PD       0:00      1 (Priority)
+           9271631      main       sh jwhal002  R    2:06:23      1 coreV1-22-016
+```
+7. Make sure this is all documented on your github page
+```
+
+
+```
+8. The naming convention for the files is as follows:
+  * SOURCEPOPULATION_SYMBIOTICSTATE_GENOTYPE_TEMPERATURE.fastq
+  * There are 2 sources: Virginia and Rhode Island
+  * There are 2 symbiotic states: Brown and White
+```
+
+```  
+  
+  
+  
+  
+  
+  
+  
