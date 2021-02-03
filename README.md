@@ -319,16 +319,47 @@ Submitted batch job 9271757
 ```
 1a-run /cm/shared/courses/dbarshis/21AdvGenomics/scripts/Schafran_trimstatstable_advbioinf_clippedtrimmed.py -h to examine usage
 ```
+[jwhal002@coreV2-22-007 fastq]$ /cm/shared/courses/dbarshis/21AdvGenomics/scripts/Schafran_trimstatstable_advbioinf_clippedtrimmed.py -h
+Written by Peter Schafran pscha005@odu.edu 5-Oct-2015
 
+This script takes a stats output file from fastx_clipper and converts it into a table.
+
+Usage: Schafran_trimstatstable.py [-c, -v, -h] inputfile.txt outputfile.txt
+
+Options (-c and -v must be listed separately to run together):
+-h      Display this help message
+-c      Use comma delimiter instead of tabs
+-v      Verbose mode (print steps to stdout)
 ```
 1b-Run the script on your data with the outputfilename YOURNAME_trimclipstatsout.txt
 ```
-
+[jwhal002@coreV2-22-007 filteringstats]$ /cm/shared/courses/dbarshis/21AdvGenomics/scripts/Schafran_trimstatstable_advbioinf_clippedtrimmed.py trimclipstats.txt jcw_trimclipstatsout.txt
 ```
 1c-Add YOURNAME_trimclipstatsout.txt to the class file by running tail -n +2 YOURNAME_trimclipstatsout.txt >> /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/Fulltrimclipstatstable.txt
 ```
-
-
+[jwhal002@coreV2-22-007 filteringstats]$ tail -n +2 jcw_trimclipstatsout.txt >> /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/Fulltrimclipstatstable.txt
 ```
 2-Now we're going to map our reads back to our assembly using
+3-write a sbatch script to do the following commands in sequence on your _clippedtrimmedfilterd.fastq datafiles from your lane of data
+```
+[jwhal002@coreV2-22-007 QCFastqs]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs
+[jwhal002@coreV2-22-007 QCFastqs]$ cat bowtielane2.sh
+#!/bin/bash -l
+
+#SBATCH -o jcwbowtie2.txt
+#SBATCH -n 1
+#SBATCH --mail-user=jwhal002@odu.edu
+#SBATCH --mail-type=END
+#SBATCH --job-name=jcwbow
+
+module load bowtie2/2.2.4
+for i in *_clippedtrimmed.fastq; do bowtie2 --rg-id ${i%_clippedtrimmed.fastq} \
+--rg SM:${i%_clippedtrimmed.fastq} \
+--very-sensitive -x /cm/shared/courses/dbarshis/18AdvBioinf/classdata/Astrangia_poculata/refassembly/ast_hostsym -U $i \
+> ${i%_clippedtrimmedfilterd.fastq}.sam; done
+[jwhal002@coreV2-22-007 QCFastqs]$ sbatch bowtielane2.sh
+Submitted batch job 9272171
+```
+
 
