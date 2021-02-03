@@ -308,14 +308,6 @@ import sys, os
 [jwhal002@coreV1-22-016 fastq]$
 [jwhal002@coreV2-25-035 fastq]$ sbatch FullTrimClip.sh
 Submitted batch job 9271757
-[jwhal002@coreV2-25-035 fastq]$ cat jcwFullTrimclip.txt
-  File "../../scripts/Trimclipfilterstatsbatch_advbioinf.py", line 26
-    fastq_prefix=fastq[:-6]
-                          ^
-TabError: inconsistent use of tabs and spaces in indentation
-  File "../../scripts/Trimclipfilterstatsbatch_advbioinf.py", line 26
-    fastq_prefix=fastq[:-6]
-                          ^
 ```
 14. This will take a while (like days)
 15. Now might be a good time to update everything on your github
