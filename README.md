@@ -361,5 +361,38 @@ for i in *_clippedtrimmed.fastq; do bowtie2 --rg-id ${i%_clippedtrimmed.fastq} \
 [jwhal002@coreV2-22-007 QCFastqs]$ sbatch bowtielane2.sh
 Submitted batch job 9272171
 ```
+4-Submit and add everything to your logfile
 
+## Day05 Homework 03-Feb-2021
+
+Homework day05 (document all this in your logfile, don't forget to pwd before each entry to remind yourself where you were working):
+1-Team up with a partner for this one and work only on a combined set of data for your two lanes of sequences
+2-Run the Trinity denovo assembler on your clippedtrimmed.fastq files for your two lanes together
+3-Modify the below sbatch script (note the differences in the header compared to the previous one)
+```
+[jwhal002@coreV3-23-002 QCFastqs]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs
+[jwhal002@coreV3-23-002 QCFastqs]$ cat jcw_trinity.sh
+#! /bin/bash -l
+
+#SBATCH -o jcw_trinity.txt
+#SBATCH -n 32
+#SBATCH -p himem
+#SBATCH --mail-user=jwhal002@odu.edu
+#SBATCH --mail-type=END
+#SBATCH --job-name=jcw_trinity
+
+enable_lmod
+module load container_env trinity
+
+crun Trinity --seqType fq --max_memory 768G --normalize_reads --single RI_B_05_18_clippedtrimmed.fastq,RI_B_05_22_clippedtrimmed.fastq,RI_B_06_14_clippedtrimmed.fastq,RI_B_06_22_clippedtrimmed.fastq,RI_W_05_18_clippedtrimmed.fastq,RI_W_05_22_clippedtrimmed.fastq,RI_W_06_14_clippedtrimmed.fastq,RI_W_06_22_clippedtrimmed.fastq,VA_B_05_18_clippedtrimmed.fastq,VA_B_05_22_clippedtrimmed.fastq,VA_B_06_14_clippedtrimmed.fastq,VA_B_06_22_clippedtrimmed.fastq,VA_W_05_18_clippedtrimmed.fastq,VA_W_05_22_clippedtrimmed.fastq,VA_W_06_14_clippedtrimmed.fastq,VA_W_06_22_clippedtrimmed.fastq,RI_B_02_14_clippedtrimmed.fastq,RI_B_02_18_clippedtrimmed.fastq,RI_B_02_22_clippedtrimmed.fastq,RI_B_09_SNP_clippedtrimmed.fastq,RI_W_02_14_clippedtrimmed.fastq,RI_W_02_18_clippedtrimmed.fastq,RI_W_02_22_clippedtrimmed.fastq,RI_W_09_SNP_clippedtrimmed.fastq,VA_B_02_14_clippedtrimmed.fastq,VA_B_02_18_clippedtrimmed.fastq,VA_B_02_22_clippedtrimmed.fastq,VA_B_08_SNP_clippedtrimmed.fastq,VA_W_02_14_clippedtrimmed.fastq,VA_W_02_18_clippedtrimmed.fastq,VA_W_02_22_clippedtrimmed.fastq,VA_W_09_SNP_clippedtrimmed.fastq --CPU 32
+
+```
+4-Check https://trinityrnaseq.github.io/ for usage info
+5-Submit your trinity script
+```
+[jwhal002@coreV3-23-002 QCFastqs]$ sbatch jcw_trinity.sh
+```
+
+## Day 06 Homework 05-Feb-2021
 
