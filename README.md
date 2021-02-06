@@ -396,3 +396,299 @@ crun Trinity --seqType fq --max_memory 768G --normalize_reads --single RI_B_05_1
 
 ## Day 06 Homework 05-Feb-2021
 
+1- start an interactive session via salloc and run the /cm/shared/apps/trinity/2.0.6/util/TrinityStats.pl script on your Trinity.fasta output from your assembly
+```
+[jwhal002@coreV2-22-028 djbtestassembly]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs/djbtestassembly
+[jwhal002@coreV2-22-028 djbtestassembly]$ ls
+Trinity.fasta
+[jwhal002@coreV2-22-028 djbtestassembly]$ /cm/shared/apps/trinity/2.0.6/util/TrinityStats.pl Trinity.fasta
+
+
+################################
+## Counts of transcripts, etc.
+################################
+Total trinity 'genes':  20980
+Total trinity transcripts:      21992
+Percent GC: 46.21
+
+########################################
+Stats based on ALL transcript contigs:
+########################################
+
+        Contig N10: 1178
+        Contig N20: 694
+        Contig N30: 514
+        Contig N40: 414
+        Contig N50: 347
+
+        Median contig length: 273
+        Average contig: 356.95
+        Total assembled bases: 7850006
+
+
+#####################################################
+## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+#####################################################
+
+        Contig N10: 1027
+        Contig N20: 643
+        Contig N30: 486
+        Contig N40: 397
+        Contig N50: 336
+
+        Median contig length: 271
+        Average contig: 347.72
+        Total assembled bases: 7295061
+```
+2- compare this with the output from avg_cov_len_fasta_advbioinf.py on our class reference assembly (/cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/refassembly/15079_Apoc_hostsym.fasta) and add both to your logfile
+```
+[jwhal002@turing1 fastq]$ /cm/shared/courses/dbarshis/21AdvGenomics/scripts/avg_cov_len_fasta_advbioinf.py /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/refassembly/15079_Apoc_hostsym.fasta
+The total number of sequences is 15079
+The average sequence length is 876
+The total number of bases is 13210470
+The minimum sequence length is 500
+The maximum sequence length is 10795
+The N50 is 881
+Median Length = 578
+contigs < 150bp = 0
+contigs >= 500bp = 15079
+contigs >= 1000bp = 3660
+contigs >= 2000bp = 536
+```
+3- less or head your bowtie2 job output file to look at your alignment statistics and calculate the following from the information:
+```
+[jwhal002@turing1 QCFastqs]$ tail jcwbowtie2.txt
+    1228 (8.21%) aligned 0 times
+    367 (2.45%) aligned exactly 1 time
+    13363 (89.34%) aligned >1 times
+91.79% overall alignment rate
+167481650 reads; of these:
+  167481650 (100.00%) were unpaired; of these:
+    12023876 (7.18%) aligned 0 times
+    7634379 (4.56%) aligned exactly 1 time
+    147823395 (88.26%) aligned >1 times
+92.82% overall alignment rate
+
+```
+	a-the mean percent "overall alignment rate"
+```
+[jwhal002@coreV3-23-024 QCFastqs]$ grep "overall alignment rate" jcwbowtie2.txt | cut -d "%" -f 1
+88.89
+86.95
+87.36
+88.24
+88.26
+92.55
+92.92
+93.67
+93.68
+93.18
+93.16
+92.46
+92.54
+93.20
+91.79
+92.82
+```
+	b-the mean percent reads "aligned exactly 1 time"
+```
+[jwhal002@coreV3-23-024 QCFastqs]$ grep "aligned exactly 1 time" jcwbowtie2.txt | cut -d "%" -f 1 | cut -d "(" -f 2
+5.91
+6.39
+6.00
+6.36
+5.47
+4.88
+4.47
+4.36
+5.18
+4.48
+4.73
+4.60
+4.49
+4.48
+2.45
+4.56
+```
+	c-the mean number of reads "aligned exactly 1 time"
+```
+[jwhal002@coreV3-23-024 QCFastqs]$ grep "aligned exactly 1 time" jcwbowtie2.txt | cut -d " " -f 5
+350917
+668166
+830829
+861858
+206921
+708047
+627497
+600014
+436715
+659303
+356357
+429609
+566691
+1045508
+367
+7634379
+```
+	d-the mean percent reads "aligned >1 times"
+```
+[jwhal002@coreV3-23-024 QCFastqs]$ grep "aligned >1 time" jcwbowtie2.txt | cut -d "%" -f 1 | cut -d "(" -f 2
+82.99
+80.56
+81.35
+81.88
+82.79
+87.68
+88.44
+89.31
+88.50
+88.71
+88.43
+87.86
+88.05
+88.72
+89.34
+88.26
+```
+	hint use grep and paste into excel
+
+4- add your statistics as single rows to the shared table /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/alignmentstatstable.txt as tab-delimited text in the following order:
+LaneX_yourinitials	b-the mean percent "overall alignment rate"	c-the mean percent reads "aligned exactly 1 time"	d-the mean number of reads "aligned exactly 1 time"	e-the mean percent reads "aligned >1 times"
+```
+[jwhal002@coreV3-23-024 QCFastqs]$ pwd                                                                                                 /cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs                                                           [jwhal002@coreV3-23-024 QCFastqs]$ nano alignstatsjcw2.txt
+[jwhal002@coreV3-23-024 QCFastqs]$ cat alignstatsjcw2.txt >> /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/alignmentstatstable.txt
+```
+
+5- Data cleanup and archiving:
+	a-mv your Trinity.fasta file from your trinity_out_dir to a folder called testassembly in your data directory
+```
+[jwhal002@coreV3-23-024 QCFastqs]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs
+[jwhal002@coreV3-23-024 QCFastqs]$ mkdir testassembly ../../
+[jwhal002@coreV3-23-024 QCFastqs]$ mv djbtestassembly/Trinity.fasta ../../testassembly/
+```
+	b-set up a sbatch script to:
+		rm -r YOURtrinity_out_dir
+		rm -r YOURoriginalfastqs
+		rm -r YOURfilteringstats # as long as you've already appended your filteringstats output to the class table as part of homework_day04.txt
+```
+[jwhal002@coreV3-23-024 QCFastqs]$ nano rmfiles.sh
+[jwhal002@coreV3-23-024 fastq]$ cat rmfiles.sh
+#!/bin/bash -l
+
+#SBATCH -o rmfiles.txt
+#SBATCH -n 1
+#SBATCH --mail-user=jwhal002@odu.edu
+#SBATCH --mail-type=END
+#SBATCH --job-name=rming
+
+rm -r /cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs/21sampleassembly_trinity_out_dir
+rm -r /cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/originalfastqs
+rm -r /cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/filteringstats
+[jwhal002@coreV3-23-024 fastq]$ sbatch rmfiles.sh
+Submitted batch job 9272889
+```
+
+6- submit a blast against sprot from your testassembly folder using the following command
+```
+[jwhal002@coreV3-23-024 testassembly]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/testassembly
+[jwhal002@coreV3-23-024 testassembly]$ nano jcw_blast2sprot.sh
+[jwhal002@coreV3-23-024 testassembly]$ cat jcw_blast2sprot.sh
+#!/bin/bash -l
+
+#SBATCH -o jcw_blast2prot.txt
+#SBATCH -n 6
+#SBATCH --mail-user=jwhal002@odu.edu
+#SBATCH --mail-type=END
+#SBATCH --job-name=b2p
+
+enable_lmod
+module load container_env blast
+blastx -query Trinity.fasta -db /cm/shared/apps/blast/databases/uniprot_sprot_Sep2018 -out blastx.outfmt6 \
+        -evalue 1e-20 -num_threads 6 -max_target_seqs 1 -outfmt 6
+[jwhal002@coreV3-23-024 testassembly]$ sbatch jcw_blast2sprot.sh
+Submitted batch job 9272890
+```
+
+7- head one of your .sam files to look at the header
+```
+[jwhal002@coreV3-23-024 QCFastqs]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs
+[jwhal002@coreV3-23-024 QCFastqs]$ head RI_B_02_14_clippedtrimmed.fastq.sam
+@HD     VN:1.0  SO:unsorted
+@SQ     SN:AstrangiaT1FW_1      LN:4823
+@SQ     SN:AstrangiaT1FW_10     LN:1096
+@SQ     SN:AstrangiaT1FW_11     LN:2560
+@SQ     SN:AstrangiaT1FW_12     LN:2686
+@SQ     SN:AstrangiaT1FW_13     LN:629
+@SQ     SN:AstrangiaT1FW_15     LN:582
+@SQ     SN:AstrangiaT1FW_16     LN:502
+@SQ     SN:AstrangiaT1FW_17     LN:1492
+@SQ     SN:AstrangiaT1FW_18     LN:1197
+```
+8- grep -v '@' your.sam | head to look at the sequence read lines, why does this work to exclude the header lines?
+```
+[jwhal002@coreV3-23-024 QCFastqs]$ grep -v "@" RI_B_02_14_clippedtrimmed.fastq.sam | head
+K00188:59:HMTFHBBXX:3:1101:4888:1666    0       AstrangiaT1FW_65674     800     1       51M     *       0       0       GGCTAGTTGATTCGGCAGGTGAGTTGTTACACACTCCTTAGCGGATTCCGA    AAFFFFJJJJJJJFFJJAJJJJFFJJJJJJJJJJ<JJJJJFJJJJJJJJJJ     AS:i:0  XS:i:0  XN:i:0  XM:i:0  XO:i:0XG:i:0   NM:i:0  MD:Z:51 YT:Z:UU RG:Z:RI_B_02_14
+K00188:59:HMTFHBBXX:3:1101:5964:1666    0       AstrangiaT1FW_65554     517     30      51M     *       0       0       AAAGACTAATCGAACTGTCTAGTAGCTGGTTCCCTCCGAAGTTTCCCTCAG    AAFFFFFJJJJFJJJFJJJJJFAJJJJJFJJJJJJJJJJJFJJJJJJFJJJ     AS:i:0  XS:i:-5 XN:i:0  XM:i:0  XO:i:0XG:i:0   NM:i:0  MD:Z:51 YT:Z:UU RG:Z:RI_B_02_14
+```
+
+9- in an interactive session run /cm/shared/courses/dbarshis/21AdvGenomics/scripts/get_explain_sam_flags_advbioinf.py on 2-3 of your .sam files using * to select 2-3 at the same time.
+```
+[jwhal002@coreV3-23-024 QCFastqs]$ /cm/shared/courses/dbarshis/21AdvGenomics/scripts/get_explain_sam_flags_advbioinf.py *2_14*.sam
+RI_B_02_14_clippedtrimmed.fastq.sam
+['0', '4', '16']
+0 :
+4 :
+        read unmapped
+16 :
+        read reverse strand
+RI_W_02_14_clippedtrimmed.fastq.sam
+['0', '4', '16']
+0 :
+4 :
+        read unmapped
+16 :
+        read reverse strand
+VA_B_02_14_clippedtrimmed.fastq.sam
+['0', '4', '16']
+0 :
+4 :
+        read unmapped
+16 :
+        read reverse strand
+VA_W_02_14_clippedtrimmed.fastq.sam
+['0', '4', '16']
+0 :
+4 :
+        read unmapped
+16 :
+        read reverse strand
+```
+
+10- we need to run the read sorting step required for SNP calling, so if you have time, set up and run the following script on your .sam files to finish before Wednesday:
+```
+[jwhal002@coreV1-22-001 QCFastqs]$ pwd                            /cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs                                                        
+[jwhal002@coreV1-22-001 QCFastqs]$ nano bamandsort.sh             
+[jwhal002@coreV1-22-001 QCFastqs]$ cat bamandsort.sh
+#!/bin/bash -l
+
+#SBATCH -o jcwbamandsort.txt
+#SBATCH -n 1
+#SBATCH --mail-user=jwhal002@odu.edu
+#SBATCH --mail-type=END
+#SBATCH --job-name=jcwbambam
+
+enable_lmod
+module load samtools/1
+for i in *.sam; do `samtools view -bS $i > ${i%.sam}_UNSORTED.bam`; done
+
+for i in *UNSORTED.bam; do samtools sort $i > ${i%_UNSORTED.bam}.bam
+samtools index ${i%_UNSORTED.bam}.bam
+done
+[jwhal002@coreV1-22-001 QCFastqs]$ sbatch bamandsort.sh
+Submitted batch job 9273039
+```
+
