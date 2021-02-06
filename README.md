@@ -670,7 +670,8 @@ VA_W_02_14_clippedtrimmed.fastq.sam
 
 10- we need to run the read sorting step required for SNP calling, so if you have time, set up and run the following script on your .sam files to finish before Wednesday:
 ```
-[jwhal002@coreV1-22-001 QCFastqs]$ pwd                            /cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs                                                        
+[jwhal002@coreV1-22-001 QCFastqs]$ pwd                         
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs                                                        
 [jwhal002@coreV1-22-001 QCFastqs]$ nano bamandsort.sh             
 [jwhal002@coreV1-22-001 QCFastqs]$ cat bamandsort.sh
 #!/bin/bash -l
