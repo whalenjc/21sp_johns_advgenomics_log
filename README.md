@@ -693,3 +693,63 @@ done
 Submitted batch job 9273039
 ```
 
+## Day 07 Homework 10-Feb-2021
+assess the quality of your assembly, cleanup data, start genotyping:
+
+1- Run the following command on your sprot output file to process into the contig length/match format that trinity examines
+```
+[jwhal002@coreV3-23-040 testassembly]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/testassembly
+[jwhal002@coreV3-23-040 testassembly]$ nano blastparse.sh
+[jwhal002@coreV3-23-040 testassembly]$ cat blastparse.sh
+#!/bin/bash -l
+
+#SBATCH -o jcw_blastx.txt
+#SBATCH -n 1
+#SBATCH --mail-user=jwhal002.odu.edu
+#SBATCH --mail-type=END
+#SBATCH --job-name=jcwblastx
+
+/cm/shared/apps/trinity/2.0.6/util/analyze_blastPlus_topHit_coverage.pl djbblastx.outfmt6 Trinity.fasta /cm/shared/apps/blast/databases/uniprot_sprot_Sep2018.fasta
+
+[jwhal002@coreV3-23-040 testassembly]$ sbatch blastparse.sh
+[jwhal002@coreV3-23-040 testassembly]$ cat jcw_blastx.txt
+Error: Couldn't open 15079_Apoc_hostsym.fasta
+#hit_pct_cov_bin        count_in_bin    >bin_below
+100     143     143
+90      52      195
+80      77      272
+70      87      359
+60      110     469
+50      133     602
+40      219     821
+30      395     1216
+20      726     1942
+10      674     2616
+```
+
+2- Rm UNSORTED.bam
+```
+[jwhal002@coreV3-23-040 QCFastqs]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs
+[jwhal002@coreV3-23-040 QCFastqs]$ nano rmunsortbam.sh
+[jwhal002@coreV3-23-040 QCFastqs]$ sbatch rmunsortbam.sh
+Submitted batch job 9276498
+```
+3- Run the following to start genotyping your SNPs for filtering next class
+```
+[jwhal002@coreV3-23-040 QCFastqs]$ nano freebayessubref.sh                                                        [jwhal002@coreV3-23-040 QCFastqs]$ cat freebayessubref.sh
+#!/bin/bash -l
+
+#SBATCH -o freebayessubref.txt
+#SBATCH -n 1
+#SBATCH --mail-user=jwhal002@odu.edu
+#SBATCH --mail-type=END
+#SBATCH --job-name=freeb
+
+enable_lmod
+module load dDocent
+freebayes --genotype-qualities -f /cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/testassembly/Trinty.fasta *.fastq.bam > jcwmergedfastqs.vcf
+[jwhal002@coreV3-23-040 QCFastqs]$ sbatch freebayessubref.sh
+Submitted batch job 9276575
+```
