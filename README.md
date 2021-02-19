@@ -753,3 +753,213 @@ freebayes --genotype-qualities -f /cm/shared/courses/dbarshis/21AdvGenomics/sand
 [jwhal002@coreV3-23-040 QCFastqs]$ sbatch freebayessubref.sh
 Submitted batch job 9276575
 ```
+
+## Day 08 Homework 12-Feb-2021
+
+Day08-VCF Filtering
+
+1- Clean up your datcd ../../a directory by:
+	-Making a SAMS folder and mv all your .sam files into that directory
+```
+[jwhal002@coreV3-23-003 QCFastqs]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/fastq/QCFastqs
+[jwhal002@coreV3-23-003 QCFastqs]$ mkdir ../../SAMS
+[jwhal002@coreV3-23-003 QCFastqs]$ mv *.sam ../../SAMS/
+```
+	-Make a BAMS folder and mv all your .bam files and .bam.bai files into that directory
+```
+[jwhal002@coreV3-23-003 QCFastqs]$ mkdir ../../BAMS
+[jwhal002@coreV3-23-003 QCFastqs]$ mv *.bam *.bam.bai ../../BAMS/
+```
+	-rm your _unfiltered.vcf files if you have any
+```
+
+```
+	-rm your .fastq files
+```
+
+```
+	-Make a VCF folder in your data directory and mv your YOURNAMEmergedfastqs.vcf into this directory (if your freebayes job didn't complete then skip this step)
+```
+[jwhal002@coreV3-23-003 QCFastqs]$ mkdir ../../VCF
+```
+
+
+2- Start an interactive session via salloc
+3- cp the /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/VCF/mergedfastq_HEAAstrangiaAssembly.vcf to your VCF folder
+
+4- Determine the number of individuals and variant sites in the class vcf file (and yours if it worked) using:
+/cm/shared/apps/vcftools/0.1.12b/bin/vcftools --vcf mergedfastq_HEAAstrangiaAssembly.vcf
+
+5- cp the /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/VCF/GoodCoralGenelistForVCFSubsetter.txt into your directory with your .vcf files
+```
+
+```
+
+
+6- Run our host vcf extractor on your merged vcf file using the following syntax:
+
+/cm/shared/courses/dbarshis/21AdvBioinf/scripts/21Sp_vcfsubsetter_advbioinf.py GoodCoralGenelistForVCFSubsetter.txt mergedfastq_HEAAstrangiaAssembly.vcf
+```
+
+```
+
+7- Compare the number of variant sites in your three files (YOURNAMEmergedfastqs.vcf,  mergedfastq_HEAAstrangiaAssembly.vcf, and  mergedfastq_HEAAstrangiaAssembly_subset.vcf) using:
+/cm/shared/apps/vcftools/0.1.12b/bin/vcftools --vcf
+```
+
+```
+
+8- Work through the VCF filtering tutorial until the following step:
+
+Now that we have a list of individuals to remove, we can feed that directly into VCFtools for filtering.
+
+vcftools --vcf raw.g5mac3dp3.recode.vcf --remove lowDP.indv --recode --recode-INFO-all --out raw.g5mac3dplm
+
+
+
+### Day 09 - Homework 17-Feb-2021
+### VCF to Genepop to PCAs
+
+1-  Run one of the following sets of prescribed filters on your mergedfastq_HEAAstrangiaAssembly_subset.vcf, note these are fairly conservative filters
+##Half the class run the following
+/cm/shared/apps/vcftools/0.1.12b/bin/vcftools --vcf mergedfastq_HEAAstrangiaAssembly_subset.vcf --maf 0.015 --max-alleles 2 --max-missing 0.5 --minQ 30 --minGQ 20 --minDP 3 --remove-indels --hwe 0.01 --recode --recode-INFO-all --out 18718_mergedfastq_HEAAstrangiaAssembly_subset_ClassFilters
+
+```
+[jwhal002@turing1 VCF]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/VCF
+[jwhal002@turing1 VCF]$ /cm/shared/apps/vcftools/0.1.12b/bin/vcftools --vcf mergedfastq_HEAAstrangiaAssembly.vcf --maf 0.015 --max-alleles 2 --max-missing 0.5 --minQ 30 --minGQ 20 --minDP 3 --remove-indels --hwe 0.01 --recode --recode-INFO-all --out 18718_mergedfastq_HEAAstrangiaAssembly_subset_ClassFilters
+
+VCFtools - v0.1.12b
+(C) Adam Auton and Anthony Marcketta 2009
+
+Parameters as interpreted:
+        --vcf mergedfastq_HEAAstrangiaAssembly.vcf
+        --recode-INFO-all
+        --maf 0.015
+        --max-alleles 2
+        --minDP 3
+        --minGQ 20
+        --hwe 0.01
+        --minQ 30
+        --max-missing 0.5
+        --out 18718_mergedfastq_HEAAstrangiaAssembly_subset_ClassFilters
+        --recode
+        --remove-indels
+
+After filtering, kept 40 out of 40 Individuals
+Outputting VCF file...
+After filtering, kept 33181 out of a possible 1214003 Sites
+Run Time = 37.00 seconds
+```
+##the other half run the filters we used from the paper
+/cm/shared/apps/vcftools/0.1.12b/bin/vcftools --vcf mergedfastq_HEAAstrangiaAssembly_subset.vcf --max-missing 0.5 --mac 3 --minQ 30 --minDP 10 --max-alleles 2 --maf 0.015 --remove-indels --recode --recode-INFO-all --out 1578_mergedfastq_HEAAstrangiaAssembly_subset_HEAFilters
+
+2- Make a population file containing two columns with no header, tab delimited text the first column should be the individual name and the second column the population to which that individual belongs
+```
+[jwhal002@turing1 VCF]$ cut -f 1 out.imiss | tail -n +2
+[jwhal002@turing1 VCF]$ cat popnames.txt
+RI_W_06_merged  RI_W
+RI_W_07_merged  RI_W
+VA_B_03_merged  VA_B
+RI_W_02_merged  RI_W
+RI_W_04_merged  RI_W
+VA_W_09_SNP_clipped     VA_W
+RI_B_08_SNP_clipped     RI_B
+VA_W_08_SNP_clipped     VA_W
+VA_B_08_SNP_clipped     VA_B
+VA_W_02_merged  VA_W
+VA_B_07_merged  VA_B
+RI_B_05_merged  RI_B
+VA_W_06_merged  VA_W
+VA_W_04_merged  VA_W
+VA_W_01_merged  VA_W
+VA_B_10_SNP_clipped     VA_B
+VA_B_06_merged  VA_B
+VA_W_05_merged  VA_W
+RI_B_09_SNP_clipped     RI_B
+VA_W_10_SNP_clipped     VA_W
+RI_W_08_SNP_clipped     RI_W
+RI_B_06_merged  RI_B
+RI_W_10_SNP_clipped     RI_W
+RI_B_04_merged  RI_B
+VA_W_03_merged  VA_W
+RI_B_07_merged  RI_B
+RI_W_05_merged  RI_W
+RI_W_09_SNP_clipped     RI_W
+VA_B_01_merged  VA_B
+VA_B_09_SNP_clipped     VA_B
+RI_B_10_SNP_clipped     RI_B
+RI_W_01_merged  RI_W
+RI_B_01_merged  RI_B
+VA_B_04_merged  VA_B
+RI_B_02_merged  RI_B
+RI_W_03_merged  RI_W
+VA_B_02_merged  VA_B
+VA_W_07_merged  VA_W
+VA_B_05_merged  VA_B
+RI_B_03_merged  RI_B
+```
+
+3- Convert your filtered .vcf file to genepop format using the following command:
+
+/cm/shared/courses/dbarshis/21AdvGenomics/scripts/vcftogenepop_advbioinf.py YOURFILTERED.vcf YOUR_PopFile.txt
+```
+[jwhal002@coreV3-23-004 VCF]$ /cm/shared/courses/dbarshis/21AdvGenomics/scripts/vcftogenepop_advbioinf.py 18718_mergedfastq_HEAAstrangiaAssembly_subset_ClassFilters.recode.vcf popfile.txt
+Indivs with genotypes in vcf file: RI_W_06_merged       RI_W_07_merged  VA_B_03_merged       RI_W_02_merged  RI_W_04_merged  VA_W_09_SNP_clipped     RI_B_08_SNP_clipped VA_W_08_SNP_clipped      VA_B_08_SNP_clipped     VA_W_02_merged  VA_B_07_merged  RI_B_05_merged       VA_W_06_merged  VA_W_04_merged  VA_W_01_merged  VA_B_10_SNP_clipped VA_B_06_merged   VA_W_05_merged  RI_B_09_SNP_clipped     VA_W_10_SNP_clipped     RI_W_08_SNP_clipped  RI_B_06_merged  RI_W_10_SNP_clipped     RI_B_04_merged  VA_W_03_merged       RI_B_07_merged  RI_W_05_merged  RI_W_09_SNP_clipped     VA_B_01_merged  VA_B_09_SNP_clipped  RI_B_10_SNP_clipped     RI_W_01_merged  RI_B_01_merged  VA_B_04_merged       RI_B_02_merged  RI_W_03_merged  VA_B_02_merged  VA_W_07_merged  VA_B_05_merged       RI_B_03_merged
+44 11717 11717 11717 11717 40
+```
+
+4- SCP your YOURFILE_allfilters.recode_subset_genepop.gen file to your laptop
+
+```
+$ scp jwhal002@turing.hpc.odu.edu:/cm/shared/courses/dbarshis/21AdvGenomics/sandboxe
+s/john/data/VCF/18718_mergedfastq_HEAAstrangiaAssembly_subset_ClassFilters.recode_ge
+nepop.gen ~/courses/21sp_advgenomics/
+```
+
+5- Switch to the adegenet_PCAs.R script and follow through the steps to produce some of the figures.
+```
+> setwd("/Users/Ava/courses/21sp_advgenomics")
+> datafile<-read.genepop('18718_mergedfastq_HEAAstrangiaAssembly_subset_ClassFilters.recode_genepop.gen', ncode=2)
+
+ Converting data from a Genepop .gen file to a genind object... 
+
+
+File description:  AllSNPs 
+
+...done.
+
+> sum(is.na(datafile$tab))
+[1] 332532
+> datafile #shows info
+/// GENIND OBJECT /////////
+
+ // 40 individuals; 11,717 loci; 23,434 alleles; size: 10.7 Mb
+
+ // Basic content
+   @tab:  40 x 23434 matrix of allele counts
+   @loc.n.all: number of alleles per locus (range: 2-2)
+   @loc.fac: locus factor for the 23434 columns of @tab
+   @all.names: list of allele names for each locus
+   @ploidy: ploidy of each individual  (range: 2-2)
+   @type:  codom
+   @call: read.genepop(file = "18718_mergedfastq_HEAAstrangiaAssembly_subset_ClassFilters.recode_genepop.gen", 
+    ncode = 2)
+
+ // Optional content
+   @pop: population of each individual (group size range: 10-10)
+> YOURdata<-scaleGen(datafile, NA.method='mean')
+> X<-YOURdata
+> Y<-as.factor(substring(pop(datafile),1,4))
+> pca1 <- dudi.pca(X,cent=F, scale=F, scannf=F, nf=3)
+> 
+> #color symbols, pop names
+> pdf("YOURINITIALS_ColorPCA1v2.pdf")
+> col <- c("blue","red", "green", "black")
+> s.class(pca1$li, Y,xax=1,yax=2, col=transp(col,.6), axesell=F, cstar=0, cpoint=3, grid=FALSE)
+> title("PCA of DJB_data\naxes 1-2")
+> dev.off()
+null device 
+          1
+```
