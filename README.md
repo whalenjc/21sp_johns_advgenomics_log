@@ -1,9 +1,9 @@
 John's Notebook
 ================
 
-## Day01 Exercises 2021-Jan-20
+### Day 01 - Exercises 20-Jan-2021
 
-## Day02 Exercises 2021-Jan-22
+### Day 02 - Exercises 22-Jan-2021
 
 Exercise day02:
 1- Logon to the cluster @turing.hpc.odu.edu
@@ -98,7 +98,7 @@ To https://github.com/whalenjc/21sp_johns_advgenomics_log.git
 Branch 'main' set up to track remote branch 'main' from 'origin'.
 ```
 
-## Day02 Homework 2021-Jan-22
+### Day 02 - Homework 22-Jan-2021
 
 1- Write an sbatch script to cp the files /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/originalfastqs/ into your own data directory
 John-HADB02
@@ -153,7 +153,7 @@ Submitted batch job 9270464
 ```
 6- Push your notebook file to your github page (document everything on your github notebook, drink a beer, and realize that all that work was just to get the data organized to start looking at it!)
 
-## Day03 Homework 27-Jan-2021
+### Day03 - Homework 27-Jan-2021
 day03 homework
 
 ```
@@ -312,7 +312,7 @@ Submitted batch job 9271757
 14. This will take a while (like days)
 15. Now might be a good time to update everything on your github
 
-## Day04 Homework 29-Jan-2021
+### Day 04 - Homework 29-Jan-2021
 1-Add your trimclipstats.txt output to the full class datafile /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/Fulltrimclipstatstable.txt using the following steps
 ```
 
@@ -363,7 +363,7 @@ Submitted batch job 9272171
 ```
 4-Submit and add everything to your logfile
 
-## Day05 Homework 03-Feb-2021
+## Day 05 - Homework 03-Feb-2021
 
 Homework day05 (document all this in your logfile, don't forget to pwd before each entry to remind yourself where you were working):
 1-Team up with a partner for this one and work only on a combined set of data for your two lanes of sequences
@@ -394,7 +394,7 @@ crun Trinity --seqType fq --max_memory 768G --normalize_reads --single RI_B_05_1
 [jwhal002@coreV3-23-002 QCFastqs]$ sbatch jcw_trinity.sh
 ```
 
-## Day 06 Homework 05-Feb-2021
+### Day 06 - Homework 05-Feb-2021
 
 1- start an interactive session via salloc and run the /cm/shared/apps/trinity/2.0.6/util/TrinityStats.pl script on your Trinity.fasta output from your assembly
 ```
@@ -693,7 +693,7 @@ done
 Submitted batch job 9273039
 ```
 
-## Day 07 Homework 10-Feb-2021
+### Day 07 - Homework 10-Feb-2021
 assess the quality of your assembly, cleanup data, start genotyping:
 
 1- Run the following command on your sprot output file to process into the contig length/match format that trinity examines
@@ -754,7 +754,7 @@ freebayes --genotype-qualities -f /cm/shared/courses/dbarshis/21AdvGenomics/sand
 Submitted batch job 9276575
 ```
 
-## Day 08 Homework 12-Feb-2021
+### Day 08 - Homework 12-Feb-2021
 
 Day08-VCF Filtering
 
@@ -963,3 +963,40 @@ File description:  AllSNPs
 null device 
           1
 ```
+### Day 10 - Homework 19-Feb-2021
+
+1- Work through the adegenet_PCAs.R script and follow through the steps to produce some of the figures.
+
+###run step 2 as an sbatch .sh script because it will take a while to finish
+2- cd into your SAMS folder containing your .sams and run the following as an sbatch script on your sam files to generate read mapping counts from each individual file:
+/cm/shared/courses/dbarshis/21AdvGenomics/scripts/countxpression_SB_advbioinf.py *.sam
+
+```
+[jwhal002@coreV2-25-002 SAMS]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/SAMS
+[jwhal002@coreV2-25-002 SAMS]$ /cm/shared/courses/dbarshis/21AdvGenomics/scripts/countxpression_SB_advbioinf.py *.sam
+```
+
+3- Once your job from step 1 is finished, start an salloc session and run the following on your outputted _counts.txt files:
+/cm/shared/courses/dbarshis/21AdvGenomics/scripts/ParseExpression2BigTable_advbioinf.py /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/host_genelist.txt YOURNAMEFullCounts_summed.txt NoMatch *_counts.txt
+
+```
+[jwhal002@coreV2-25-017 SAMS]$ /cm/shared/courses/dbarshis/21AdvGenomics/scripts/ParseExpression2BigTable_advbioinf.py /cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/host_genelist.txt jcwFullCounts_summed.txt NoMatch *_counts.txt
+Hits not matchedRI_B_02_14_clippedtrimmed.fastq_counts.txt=13381        RI_B_02_18_clippedtrimmed.fastq_counts.txt=13381        RI_B_02_22_clippedtrimmed.fastq_counts.txt=13381     RI_B_06_14_clippedtrimmed.fastq_counts.txt=1698 RI_B_06_22_clippedtrimmed.fastq_counts.txt=1698 RI_B_09_SNP_clippedtrimmed.fastq_counts.txt=13381       RI_W_02_14_clippedtrimmed.fastq_counts.txt=13381     RI_W_02_18_clippedtrimmed.fastq_counts.txt=13381        RI_W_02_22_clippedtrimmed.fastq_counts.txt=13381        RI_W_06_14_clippedtrimmed.fastq_counts.txt=1698      RI_W_06_22_clippedtrimmed.fastq_counts.txt=1698 RI_W_09_SNP_clippedtrimmed.fastq_counts.txt=13381       VA_B_02_14_clippedtrimmed.fastq_counts.txt=13381     VA_B_02_18_clippedtrimmed.fastq_counts.txt=13381        VA_B_02_22_clippedtrimmed.fastq_counts.txt=13381        VA_B_06_14_clippedtrimmed.fastq_counts.txt=1698      VA_B_08_SNP_clippedtrimmed.fastq_counts.txt=13381       VA_W_02_14_clippedtrimmed.fastq_counts.txt=13381        VA_W_02_18_clippedtrimmed.fastq_counts.txt=13381    VA_W_02_22_clippedtrimmed.fastq_counts.txt=13381 VA_W_09_SNP_clippedtrimmed.fastq_counts.txt=13381
+```
+
+4- scp YOURNAMEFullCounts_summed.txt to your laptop
+
+```
+Ava@Ava-PC MINGW64 ~/courses/21sp_advgenomics/assignments_exercises/day10 (main)
+$ scp jwhal002@turing.hpc.odu.edu:/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/john/data/SAMS/jcwFullCo
+unts_summed.txt ./
+jwhal002@turing.hpc.odu.edu's password:
+jcwFullCounts_summed.txt                                                     100% 2112KB   4.0MB/s   00:00
+```
+
+
+5- edit the first line of YOURNAMEFullCounts_summed.txt to remove the _counts.txt_UniqueTotReads from each sample name to just retain the actual informative part of the sample name (e.g., RI_W_06_18)
+
+find what:\t(\w\w_\w_\d\d_...)\w*.\w*.\w*
+replace with:\t\1
