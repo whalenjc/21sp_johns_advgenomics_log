@@ -1000,3 +1000,38 @@ jcwFullCounts_summed.txt                                                     100
 
 find what:\t(\w\w_\w_\d\d_...)\w*.\w*.\w*
 replace with:\t\1
+
+### Day 13 - Homework 03-Mar-2021
+1- create an sbatch script to rm -r your sandbox/YOURNAME directory
+```
+[jwhal002@coreV3-23-046 sandboxes]$ pwd
+/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes
+[jwhal002@coreV3-23-046 sandboxes]$ cat jcw_sandbox_rm.sh
+#!/bin/bash -l
+
+#SBATCH -o jcw_sandbox_rm.txt
+#SBATCH -n 1
+#SBATCH --mail-user=jwhal002@odu.edu
+#SBATCH --mail-type=END
+#SBATCH --job-name=jcw_sandy_rm
+
+rm -r ./john
+```
+2- submit your sbatch script and add the entry to your logfile/readme
+```
+[jwhal002@coreV3-23-046 sandboxes]$ sbatch jcw_sandbox_rm.sh
+
+```
+3- scp your github logfile to the /cm/shared/courses/dbarshis/21AdvGenomics/archive with the name LASTNAME_FIRSTNAME_readme.md
+```
+Ava@Ava-PC MINGW64 ~/courses/21sp_advgenomics/21sp_johns_advgenomics_log (main)
+$ scp README.md jwhal002@turing.hpc.odu.edu:/cm/shared/courses/dbarshis/21AdvGenomics/archive
+jwhal002@turing.hpc.odu.edu's password:
+README.md                                                                    100%   42KB 182.6KB/s   00:00
+```
+4- scp the following files to your local computer
+	scp jwhal002@turing.hpc.odu.edu:/cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/refassembly/15079_Apoc_hostsym.fasta ./
+	scp jwhal002@turing.hpc.odu.edu:/cm/shared/courses/dbarshis/21AdvGenomics/classdata/Astrangia_poculata/refassembly/15079_Apoc_hostsym.fasta.fai ./
+	scp jwhal002@turing.hpc.odu.edu:/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/dan/data/BAMS/RI_B_01/RI_B_01.bam ./
+	scp jwhal002@turing.hpc.odu.edu:/cm/shared/courses/dbarshis/21AdvGenomics/sandboxes/dan/data/BAMS/RI_B_01/RI_B_01.bam.bai ./
+5- launch IGV on your local machine and load in 15079_Apoc_hostsym.fasta as the "genome" and RI_B_01.bam as the input file
